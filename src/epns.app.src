@@ -1,0 +1,19 @@
+{application, epns,
+ [{description, "Erlang Push Notifications"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {mod, { epns_app, []}},
+  {applications,
+   [kernel,
+    stdlib,
+    lager,
+    jiffy,
+    inets
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {maintainers, []},
+  {licenses, ["MIT"]},
+  {links, []}
+ ]}.
