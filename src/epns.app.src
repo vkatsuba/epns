@@ -8,7 +8,8 @@
     stdlib,
     lager,
     jiffy,
-    inets
+    inets,
+    ssl
    ]},
   {env,[]},
   {modules, []},

@@ -6,7 +6,7 @@
 
 -define(COMMAND_REQ, 1).
 -define(COMMAND_RESP, 8).
--define(EXPIRY, 1000000).
+-define(EXPIRY, (os:system_time(second) + 604800)).
 -define(TOKEN_LENGTH, 32).
 -define(TIMEOUT, 1000).
 
