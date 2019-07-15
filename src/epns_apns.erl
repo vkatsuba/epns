@@ -48,13 +48,14 @@ push(#{playload := P, key := K, cert := C, url := U, token := T}) ->
 %% -------------------------------------------------------------------
 -spec recv(Pid :: pid()) -> Result :: term().
 
-recv(Parent) ->
+recv(Pid) ->
   receive
     {ssl, Sock, <<?COMMAND_RESP:8, Status, UserID:32/big>>} ->
       lager:error("APNS Error: [~p:~p/1]: Reason: ~p, message ID: ~p~n", [?MODULE, push, convert_status(Status), UserID]),
       ssl:close(Sock),
-      Parent ! {error, UserID};
+      Pid ! {error, UserID};
     {ssl_closed, _} -> ok
+  after ?TIMEOUT -> exit(Pid, normal)
   end.
 
 %% -------------------------------------------------------------------
