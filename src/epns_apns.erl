@@ -55,7 +55,7 @@ recv(Pid) ->
       ssl:close(Sock),
       Pid ! {error, UserID};
     {ssl_closed, _} -> ok
-  after ?TIMEOUT -> exit(Pid, normal)
+  after 0 -> exit(Pid, normal)
   end.
 
 %% -------------------------------------------------------------------
