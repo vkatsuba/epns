@@ -8,7 +8,6 @@
 -define(COMMAND_RESP, 8).
 -define(EXPIRY, (os:system_time(second) + 604800)).
 -define(TOKEN_LENGTH, 32).
--define(TIMEOUT, 1000).
 
 %%% ==================================================================
 %%% API
@@ -34,7 +33,6 @@ push(#{playload := P, key := K, cert := C, url := U, token := T}) ->
         ?TOKEN_LENGTH:16/big, DeviceToken:256/integer, PayloadLen:16/big, Payload/binary>>,
       ssl:controlling_process(Socket, spawn(fun() -> recv(self()) end)),
       ssl:send(Socket, Packet),
-      timer:apply_after(?TIMEOUT, ssl, close, [Socket]),
       {ok, apns};
     {error, Reason} ->
       {error, Reason}
@@ -55,7 +53,7 @@ recv(Pid) ->
       ssl:close(Sock),
       Pid ! {error, UserID};
     {ssl_closed, _} -> ok
-  after 0 -> exit(Pid, normal)
+  after 1 -> exit(Pid, normal)
   end.
 
 %% -------------------------------------------------------------------
