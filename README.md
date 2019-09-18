@@ -2,7 +2,7 @@
 **epns** is Erlang Push Notifications. This is a small client library for sending FCM/GCM/APNS Push Notifications
 
 ## Goals
-**epns**(Erlang Push Notifications. ) library aims to provide a simple way for push FCM/GCM/APNS notifications.
+**epns**(Erlang Push Notifications) library aims to provide a simple way for push FCM/GCM/APNS notifications.
 
 ## Documentation
 ### Build & Run
