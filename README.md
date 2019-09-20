@@ -33,7 +33,7 @@ $ make
    ]},
 ...
 ```
-### FCM
+### Send FCM
 ```erlang
 %%% Useful links:
 %%%  * https://firebase.google.com/docs/cloud-messaging/http-server-ref
@@ -52,7 +52,7 @@ FCMData = #{
 
 epns:push(fcm, FCMData).
 ```
-### APNS
+### Send APNS
 ```erlang
 %%% Useful links:
 %%%  * https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html
