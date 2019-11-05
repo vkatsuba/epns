@@ -1,17 +1,17 @@
 # epns
 **epns** is Erlang Push Notifications. This is a small client library for sending FCM/GCM/APNS Push Notifications
 
-## Goals
+# Goals
 **epns**(Erlang Push Notifications) library aims to provide a simple way for push FCM/GCM/APNS notifications.
 
-## Documentation
-### Build & Run
+# Documentation
+## Build & Run
 ```sh
 $ git clone https://github.com/vkatsuba/epns.git
 $ cd epns
 $ make
 ```
-### Install `epns` to project: [Rebar3](https://www.rebar3.org/)
+## Install `epns` to project: [Rebar3](https://www.rebar3.org/)
 * Edit file **rebar.config**:
 ```
 ...
@@ -33,7 +33,7 @@ $ make
    ]},
 ...
 ```
-### Send FCM
+# Send FCM by Erlang
 ```erlang
 %%% Useful links:
 %%%  * https://firebase.google.com/docs/cloud-messaging/http-server-ref
@@ -52,7 +52,7 @@ FCMData = #{
 
 epns:push(fcm, FCMData).
 ```
-### Send APNS
+# Send APNS by Erlang
 ```erlang
 %%% Useful links:
 %%%  * https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html
@@ -74,7 +74,7 @@ APNSData = #{
 epns:push(apns, APNSData).
 ```
 
-### To be continued ...
+# To be continued ...
 
-## Support
+# Support
 v.katsuba.dev@gmail.com
