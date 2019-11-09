@@ -37,7 +37,8 @@ handle_status(_, Reason) -> {error, Reason}.
 -spec get_http_resp_code(HttpcResult :: tuple()) -> Code :: pos_integer().
 
 get_http_resp_code({{_, Code, _}, _, _}) -> Code;
-get_http_resp_code({Code, _}) -> Code.
+get_http_resp_code({Code, _}) -> Code;
+get_http_resp_code(_) -> 0.
 
 %% -------------------------------------------------------------------
 %% @private
