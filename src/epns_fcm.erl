@@ -21,12 +21,23 @@ push(#{playload := P, key := K, url := U}) ->
 %% -------------------------------------------------------------------
 -spec handle_status(StatusCode :: integer(), RespBody :: maps:map()) -> Result :: tuple().
 
-handle_status(200, RespBody) -> jiffy:decode(list_to_binary(RespBody), [return_maps]);
-handle_status(201, _) -> {ok, #{multicast_id=> <<>>, success => 1, failure => 0, canonical_ids => 0, results => []}};
-handle_status(400, RespBody) -> {error, RespBody};
-handle_status(401, _) -> {error, auth_error};
-handle_status(500, _) -> {error, server_error};
-handle_status(_, Reason) -> {error, Reason}.
+handle_status(200, RespBody) ->
+  jiffy:decode(list_to_binary(RespBody), [return_maps]);
+
+handle_status(201, _) ->
+  {ok, #{multicast_id=> <<>>, success => 1, failure => 0, canonical_ids => 0, results => []}};
+
+handle_status(400, RespBody) ->
+  {error, RespBody};
+
+handle_status(401, _) ->
+  {error, auth_error};
+
+handle_status(500, _) ->
+  {error, server_error};
+
+handle_status(_, Reason) ->
+  {error, Reason}.
 
 %% -------------------------------------------------------------------
 %% @private
@@ -36,9 +47,14 @@ handle_status(_, Reason) -> {error, Reason}.
 %% -------------------------------------------------------------------
 -spec get_http_resp_code(HttpcResult :: tuple()) -> Code :: pos_integer().
 
-get_http_resp_code({{_, Code, _}, _, _}) -> Code;
-get_http_resp_code({Code, _}) -> Code;
-get_http_resp_code(_) -> 0.
+get_http_resp_code({{_, Code, _}, _, _}) ->
+  Code;
+
+get_http_resp_code({Code, _}) ->
+  Code;
+
+get_http_resp_code(_) ->
+  0.
 
 %% -------------------------------------------------------------------
 %% @private
@@ -48,5 +64,11 @@ get_http_resp_code(_) -> 0.
 %% -------------------------------------------------------------------
 -spec get_http_resp_body(HttpcResult :: tuple()) -> Body :: binary().
 
-get_http_resp_body({_, _, Body}) -> Body;
-get_http_resp_body({_, Body}) -> Body.
+get_http_resp_body({_, _, Body}) ->
+  Body;
+
+get_http_resp_body({_, Body}) ->
+  Body;
+
+get_http_resp_body(_) ->
+  <<"Not Implemented">>.
