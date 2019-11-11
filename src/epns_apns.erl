@@ -14,7 +14,7 @@
 %%% API
 %%% ==================================================================
 
--export([push/1]).
+-export([push/1, recv/2]).
 
 %% -------------------------------------------------------------------
 %% @doc
@@ -32,29 +32,29 @@ push(#{playload := P, key := K, cert := C, url := U, token := T}) ->
       DeviceToken = binary_to_integer(T, 16),
       Packet = <<?COMMAND_REQ:8, ID:32/big, ?EXPIRY:4/big-unsigned-integer-unit:8,
         ?TOKEN_LENGTH:16/big, DeviceToken:256/integer, PayloadLen:16/big, Payload/binary>>,
-      ssl:controlling_process(Socket, spawn(fun() -> recv(self()) end)),
       ssl:send(Socket, Packet),
+      ssl:close(Socket),
       {ok, apns};
     {error, Reason} ->
       {error, Reason}
   end.
 
 %% -------------------------------------------------------------------
-%% @private
 %% @doc
 %% Receive errors of APNS
+%% Use inside of push/1: ssl:controlling_process(Socket, spawn(fun() -> recv(self(), 100) end))
 %% @end
 %% -------------------------------------------------------------------
--spec recv(Pid :: pid()) -> Result :: term().
+-spec recv(Pid :: pid(), Timeout :: integer()) -> Result :: term().
 
-recv(Pid) ->
+recv(Pid, Timeout) ->
   receive
     {ssl, Sock, <<?COMMAND_RESP:8, Status, UserID:32/big>>} ->
       lager:error("APNS Error: [~p:~p/1]: Reason: ~p, message ID: ~p~n", [?MODULE, push, convert_status(Status), UserID]),
       ssl:close(Sock),
       Pid ! {error, UserID};
     {ssl_closed, _} -> ok
-  after 1 -> exit(Pid, normal)
+  after Timeout -> exit(Pid, normal)
   end.
 
 %% -------------------------------------------------------------------
