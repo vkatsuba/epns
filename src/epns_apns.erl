@@ -8,7 +8,7 @@
 -define(COMMAND_RESP, 8).
 -define(EXPIRY, (os:system_time(second) + 604800)).
 -define(TOKEN_LENGTH, 32).
--define(TIMEOUT, 1000).
+-define(TIMEOUT, 500).
 
 %%% ==================================================================
 %%% API
@@ -33,7 +33,7 @@ push(#{playload := P, key := K, cert := C, url := U, token := T}) ->
       Packet = <<?COMMAND_REQ:8, ID:32/big, ?EXPIRY:4/big-unsigned-integer-unit:8,
         ?TOKEN_LENGTH:16/big, DeviceToken:256/integer, PayloadLen:16/big, Payload/binary>>,
       ssl:send(Socket, Packet),
-      ssl:close(Socket),
+      ssl:close(Socket, 0),
       {ok, apns};
     {error, Reason} ->
       {error, Reason}
