@@ -10,6 +10,7 @@
 -spec push(Data :: maps:map()) -> Result :: tuple().
 
 push(#{playload := P, key := K, url := U}) ->
+  httpc:set_options([{keep_alive_timeout, 1}]),
   {_, Resp} = httpc:request(post, {U, [{"Authorization", "key=" ++ K}], "application/json", jiffy:encode(P)}, [], []),
   handle_status(get_http_resp_code(Resp), get_http_resp_body(Resp)).
 
