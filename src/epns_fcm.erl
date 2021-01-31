@@ -63,7 +63,7 @@ get_http_resp_code(_) ->
 %% Returns HTTP response body
 %% @end
 %% -------------------------------------------------------------------
--spec get_http_resp_body(HttpcResult :: tuple()) -> Body :: binary().
+-spec get_http_resp_body(HttpcResult :: tuple()) -> Body :: list().
 
 get_http_resp_body({_, _, Body}) ->
   Body;
@@ -72,4 +72,4 @@ get_http_resp_body({_, Body}) ->
   Body;
 
 get_http_resp_body(_) ->
-  <<"Not Implemented">>.
+  "Not Implemented".
