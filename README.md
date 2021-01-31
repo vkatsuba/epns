@@ -1,58 +1,62 @@
 # Erlang Push Notifications - epns
 **epns** is Erlang Push Notifications. This is a small client library for sending FCM/GCM/APNS Push Notifications
 
-# Goals
+## Goals
 **epns**(Erlang Push Notifications) library aims to provide a simple way for push FCM/GCM/APNS notifications.
 
-# Documentation
-## Build & Run
+## Documentation
+### Build & Run
 ```sh
-$ git clone https://github.com/vkatsuba/epns.git
-$ cd epns
-$ make
+$ git clone https://github.com/vkatsuba/shot.git
+$ cd shot
+$ wget https://s3.amazonaws.com/rebar3/rebar3
+$ chmod u+x ./rebar3
+$ ./rebar3 shell
 ```
-## Install `epns` to project: [Rebar3](https://www.rebar3.org/)
+### Dialyzer
+```sh
+$ ./rebar3 dialyzer
+```
+### Run Common Tests
+```sh
+# See result in _build/test/logs after tests pass
+$ ./rebar3 do xref, ct
+```
+### Clean Project
+```sh
+$ ./rebar3 clean
+```
+### Add `epns` to project: [Rebar3](https://www.rebar3.org/)
 * Edit file **rebar.config**:
-```
-...
+```erlang
 {deps, [
-  ...
-  {epns, {git, "git://github.com/vkatsuba/epns.git", {branch, "master"}}},
-  ...
+    {epns, "1.0.0"},
 ]}.
-...
 ```
-* Edit file ***.app.src**:
-```
-...
-  {applications,
-   [
-    ...,
-    epns,
-    ...
-   ]},
-...
-```
-# Send FCM by Erlang
+
+## Send Push Notifications
+### Send FCM by Erlang
 ```erlang
 %%% Useful links:
 %%%  * https://firebase.google.com/docs/cloud-messaging/http-server-ref
 %%%  * https://developer.clevertap.com/docs/find-your-fcm-sender-id-fcm-server-api-key
 
 FCMData = #{
-  key => "TheFcmServerApiKey",
-  url => "https://fcm.googleapis.com/fcm/send",
-  playload => #{
-    to => <<"GoogleUserToken">>,
-    priority => <<"high">>,
-    data => #{
-      <<"title">> => <<"Some Title">>,
-      <<"some_custom_field">> => true
-     }}}.
+    key => "TheFcmServerApiKey",
+    url => "https://fcm.googleapis.com/fcm/send",
+    playload => #{
+        to => <<"GoogleUserToken">>,
+        priority => <<"high">>,
+        data => #{
+            <<"title">> => <<"Some Title">>,
+            <<"some_custom_field">> => true
+        }
+    }
+}.
 
 epns:push(fcm, FCMData).
 ```
-# Send APNS by Erlang
+### Send APNS by Erlang
 ```erlang
 %%% Useful links:
 %%%  * https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html
@@ -60,21 +64,21 @@ epns:push(fcm, FCMData).
 %%%  * https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/LegacyNotificationFormat.html
 
 APNSData = #{
-  cert => "/full/patch/to/cert.pem",
-  key => "/full/patch/to/key.key",
-  url => "gateway.push.apple.com",
-  token => <<"VoipTokenOfUserDevice">>,
-  playload => #{
-    aps => #{alert => <<"Some Title Of Alert APNS">>},
-    data => #{
-      <<"title">> => <<"Some Title">>,
-      <<"custom_field">> => <<"some_data">>
-     }}}.
+    cert => "/full/patch/to/cert.pem",
+    key => "/full/patch/to/key.key",
+    url => "gateway.push.apple.com",
+    token => <<"VoipTokenOfUserDevice">>,
+    playload => #{
+        aps => #{alert => <<"Some Title Of Alert APNS">>},
+        data => #{
+            <<"title">> => <<"Some Title">>,
+            <<"custom_field">> => <<"some_data">>
+        }
+    }
+}.
 
 epns:push(apns, APNSData).
 ```
-
-# To be continued ...
 
 # Support
 v.katsuba.dev@gmail.com
