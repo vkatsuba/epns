@@ -13,16 +13,15 @@ $ wget https://s3.amazonaws.com/rebar3/rebar3
 $ chmod u+x ./rebar3
 $ ./rebar3 shell
 ```
-### Dialyzer
+### Run `dialyzer`
 ```sh
 $ ./rebar3 dialyzer
 ```
-### Run Common Tests
+### Run `xref`
 ```sh
-# See result in _build/test/logs after tests pass
-$ ./rebar3 do xref, ct
+$ ./rebar3 do xref
 ```
-### Clean Project
+### Clean `epns`
 ```sh
 $ ./rebar3 clean
 ```
