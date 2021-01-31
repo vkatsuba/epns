@@ -29,12 +29,6 @@
 -export([push/2]).
 
 %%% ==================================================================
-%%% Helpers API
-%%% ==================================================================
-
--export([apns/1, recv/2]).
-
-%%% ==================================================================
 %%% Macros
 %%% ==================================================================
 
@@ -61,7 +55,12 @@ push(apns, Data) when is_map(Data) ->
 push(_, _) ->
     {error, bad_args}.
 
+%%% ==================================================================
+%%% Internal/Private functions
+%%% ==================================================================
+
 %% -------------------------------------------------------------------
+%% @private
 %% @doc
 %% Send APNS push notification
 %% @end
@@ -72,7 +71,7 @@ apns(#{playload := P, key := K, cert := C, url := U, token := T}) ->
     case ssl:connect(U, 2195, [{certfile, C}, {keyfile, K}, {mode, binary}, {verify, verify_none}], ?TIMEOUT) of
         {ok, Socket} ->
             ID = rand:uniform(9999),
-            Payload = jiffy:encode(P),
+            Payload = jsx:encode(P),
             PayloadLen = erlang:byte_size(Payload),
             DeviceToken = binary_to_integer(T, 16),
             Packet = <<?COMMAND_REQ:8, ID:32/big, ?EXPIRY:4/big-unsigned-integer-unit:8,
