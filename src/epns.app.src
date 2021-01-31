@@ -1,6 +1,6 @@
 {application, epns,
  [{description, "APNS and FCM Erlang Push Notifications library"},
-  {vsn, "0.1.0"},
+  {vsn, semver},
   {registered, []},
   {applications,
    [kernel,
