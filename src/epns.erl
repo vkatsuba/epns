@@ -48,10 +48,10 @@
 %% -------------------------------------------------------------------
 -spec push(Provider :: atom(), Data :: maps:map()) -> Result :: tuple().
 
-push(fcm, Data) when is_map(Data) ->
-    epns_fcm:push(Data);
 push(apns, Data) when is_map(Data) ->
     apns(Data);
+push(fcm, Data) when is_map(Data) ->
+    fcm(Data);
 push(_, _) ->
     {error, bad_args}.
 
@@ -75,10 +75,74 @@ apns(#{playload := P, key := K, cert := C, url := U, token := T}) ->
             PayloadLen = erlang:byte_size(Payload),
             DeviceToken = binary_to_integer(T, 16),
             Packet = <<?COMMAND_REQ:8, ID:32/big, ?EXPIRY:4/big-unsigned-integer-unit:8,
-            ?TOKEN_LENGTH:16/big, DeviceToken:256/integer, PayloadLen:16/big, Payload/binary>>,
-            ssl:send(Socket, Packet),
-            ssl:close(Socket, 0),
+                       ?TOKEN_LENGTH:16/big, DeviceToken:256/integer, PayloadLen:16/big, Payload/binary>>,
+            _ = ssl:send(Socket, Packet),
+            _ = ssl:close(Socket, 0),
             {ok, apns};
         {error, Reason} ->
             {error, Reason}
     end.
+
+%% -------------------------------------------------------------------
+%% @private
+%% @doc
+%% Send FCM push notification
+%% @end
+%% -------------------------------------------------------------------
+-spec fcm(Data :: maps:map()) -> Result :: tuple().
+
+fcm(#{playload := P, key := K, url := U}) ->
+    _ = httpc:set_options([{keep_alive_timeout, 0}]),
+    {_, Resp} = httpc:request(post, {U, [{"Authorization", "key=" ++ K}], "application/json", jsx:encode(P)}, [], []),
+    handle_status(get_http_resp_code(Resp), get_http_resp_body(Resp)).
+
+%% -------------------------------------------------------------------
+%% @private
+%% @doc
+%% Handler status code
+%% @end
+%% -------------------------------------------------------------------
+-spec handle_status(StatusCode :: integer(), RespBody :: maps:map()) -> Result :: tuple().
+
+handle_status(200, RespBody) ->
+    jsx:decode(list_to_binary(RespBody), [return_maps]);
+handle_status(201, _) ->
+    {ok, #{multicast_id=> <<>>, success => 1, failure => 0, canonical_ids => 0, results => []}};
+handle_status(400, RespBody) ->
+    {error, RespBody};
+handle_status(401, _) ->
+    {error, auth_error};
+handle_status(500, _) ->
+    {error, server_error};
+handle_status(_, Reason) ->
+    {error, Reason}.
+
+%% -------------------------------------------------------------------
+%% @private
+%% @doc
+%% Returns HTTP response code
+%% @end
+%% -------------------------------------------------------------------
+-spec get_http_resp_code(HttpcResult :: tuple()) -> Code :: pos_integer().
+
+get_http_resp_code({{_, Code, _}, _, _}) ->
+    Code;
+get_http_resp_code({Code, _}) ->
+    Code;
+get_http_resp_code(_) ->
+    0.
+
+%% -------------------------------------------------------------------
+%% @private
+%% @doc
+%% Returns HTTP response body
+%% @end
+%% -------------------------------------------------------------------
+-spec get_http_resp_body(HttpcResult :: tuple()) -> Body :: list().
+
+get_http_resp_body({_, _, Body}) ->
+    Body;
+get_http_resp_body({_, Body}) ->
+    Body;
+get_http_resp_body(_) ->
+    "Not Implemented".
