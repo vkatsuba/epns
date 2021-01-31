@@ -11,7 +11,7 @@
 
 push(#{playload := P, key := K, url := U}) ->
   httpc:set_options([{keep_alive_timeout, 0}]),
-  {_, Resp} = httpc:request(post, {U, [{"Authorization", "key=" ++ K}], "application/json", jiffy:encode(P)}, [], []),
+  {_, Resp} = httpc:request(post, {U, [{"Authorization", "key=" ++ K}], "application/json", jsx:encode(P)}, [], []),
   handle_status(get_http_resp_code(Resp), get_http_resp_body(Resp)).
 
 %% -------------------------------------------------------------------
@@ -23,7 +23,7 @@ push(#{playload := P, key := K, url := U}) ->
 -spec handle_status(StatusCode :: integer(), RespBody :: maps:map()) -> Result :: tuple().
 
 handle_status(200, RespBody) ->
-  jiffy:decode(list_to_binary(RespBody), [return_maps]);
+  jsx:decode(list_to_binary(RespBody), [return_maps]);
 
 handle_status(201, _) ->
   {ok, #{multicast_id=> <<>>, success => 1, failure => 0, canonical_ids => 0, results => []}};

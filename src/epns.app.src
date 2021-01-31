@@ -5,8 +5,6 @@
   {applications,
    [kernel,
     stdlib,
-    lager,
-    jiffy,
     inets,
     ssl
    ]},
