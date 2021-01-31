@@ -10,9 +10,9 @@
 -spec push(Data :: maps:map()) -> Result :: tuple().
 
 push(#{playload := P, key := K, url := U}) ->
-  httpc:set_options([{keep_alive_timeout, 0}]),
-  {_, Resp} = httpc:request(post, {U, [{"Authorization", "key=" ++ K}], "application/json", jsx:encode(P)}, [], []),
-  handle_status(get_http_resp_code(Resp), get_http_resp_body(Resp)).
+    httpc:set_options([{keep_alive_timeout, 0}]),
+    {_, Resp} = httpc:request(post, {U, [{"Authorization", "key=" ++ K}], "application/json", jsx:encode(P)}, [], []),
+    handle_status(get_http_resp_code(Resp), get_http_resp_body(Resp)).
 
 %% -------------------------------------------------------------------
 %% @private
@@ -23,22 +23,22 @@ push(#{playload := P, key := K, url := U}) ->
 -spec handle_status(StatusCode :: integer(), RespBody :: maps:map()) -> Result :: tuple().
 
 handle_status(200, RespBody) ->
-  jsx:decode(list_to_binary(RespBody), [return_maps]);
+    jsx:decode(list_to_binary(RespBody), [return_maps]);
 
 handle_status(201, _) ->
-  {ok, #{multicast_id=> <<>>, success => 1, failure => 0, canonical_ids => 0, results => []}};
+    {ok, #{multicast_id=> <<>>, success => 1, failure => 0, canonical_ids => 0, results => []}};
 
 handle_status(400, RespBody) ->
-  {error, RespBody};
+    {error, RespBody};
 
 handle_status(401, _) ->
-  {error, auth_error};
+    {error, auth_error};
 
 handle_status(500, _) ->
-  {error, server_error};
+    {error, server_error};
 
 handle_status(_, Reason) ->
-  {error, Reason}.
+    {error, Reason}.
 
 %% -------------------------------------------------------------------
 %% @private
@@ -49,13 +49,13 @@ handle_status(_, Reason) ->
 -spec get_http_resp_code(HttpcResult :: tuple()) -> Code :: pos_integer().
 
 get_http_resp_code({{_, Code, _}, _, _}) ->
-  Code;
+    Code;
 
 get_http_resp_code({Code, _}) ->
-  Code;
+    Code;
 
 get_http_resp_code(_) ->
-  0.
+    0.
 
 %% -------------------------------------------------------------------
 %% @private
@@ -66,10 +66,10 @@ get_http_resp_code(_) ->
 -spec get_http_resp_body(HttpcResult :: tuple()) -> Body :: list().
 
 get_http_resp_body({_, _, Body}) ->
-  Body;
+    Body;
 
 get_http_resp_body({_, Body}) ->
-  Body;
+    Body;
 
 get_http_resp_body(_) ->
-  "Not Implemented".
+    "Not Implemented".

@@ -1,17 +1,16 @@
-{application, epns,
- [{description, "APNS and FCM Erlang Push Notifications library"},
-  {vsn, semver},
-  {registered, []},
-  {applications,
-   [kernel,
-    stdlib,
-    inets,
-    ssl
-   ]},
-  {env,[]},
-  {modules, []},
-
-  {maintainers, []},
-  {licenses, ["MIT"]},
-  {links, [{"Github", "https://github.com/vkatsuba/epns"}]}
- ]}.
+{application, epns, [
+    {description, "APNS and FCM Erlang Push Notifications library"},
+    {vsn, semver},
+    {registered, []},
+    {applications, [
+        kernel,
+        stdlib,
+        inets,
+        ssl
+    ]},
+    {env,[]},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["MIT"]},
+    {links, [{"Github", "https://github.com/vkatsuba/epns"}]}
+]}.
