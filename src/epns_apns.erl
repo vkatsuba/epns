@@ -50,7 +50,7 @@ push(#{playload := P, key := K, cert := C, url := U, token := T}) ->
 recv(Pid, Timeout) ->
   receive
     {ssl, Sock, <<?COMMAND_RESP:8, Status, UserID:32/big>>} ->
-      lager:error("APNS Error: [~p:~p/1]: Reason: ~p, message ID: ~p~n", [?MODULE, push, convert_status(Status), UserID]),
+      io:format("APNS Error: [~p:~p/1]: Reason: ~p, message ID: ~p~n", [?MODULE, push, convert_status(Status), UserID]),
       ssl:close(Sock),
       Pid ! {error, UserID};
     {ssl_closed, _} -> ok
