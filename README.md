@@ -31,7 +31,7 @@ $ ./rebar3 clean
 * Edit file **rebar.config**:
 ```erlang
 {deps, [
-    {epns, "1.0.0"},
+    {epns, "1.1.0"},
 ]}.
 ```
 
