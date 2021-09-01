@@ -4,7 +4,7 @@
 [![Hex.pm Version](https://img.shields.io/hexpm/v/epns.svg?style=flat-square)](https://hex.pm/packages/epns)
 
 ## Goals
-**epns**(Erlang Push Notifications) library aims to provide a simple way for push **FCM**/**GCM**/**APNS** notifications.
+**epns**(**Erlang Push Notifications**) library aims to provide a simple way for push **FCM**/**GCM**/**APNS** notifications.
 
 ## Documentation
 ### Build & Run
